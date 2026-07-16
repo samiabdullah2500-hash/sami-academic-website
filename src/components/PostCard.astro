@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { post: CollectionEntry<'blog'> }
+const { post } = Astro.props;
+const { title, date, category, description } = post.data;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const d = date.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
+---
+<a class="card post-card" href={`${base}/blog/${post.id}/`}>
+  <div class="meta">
+    <span class="chip chip-accent">{category}</span>
+    <time datetime={date.toISOString()}>{d}</time>
+  </div>
+  <h3>{title}</h3>
+  <p>{description}</p>
+</a>
+
+<style>
+  .post-card { display: flex; flex-direction: column; gap: 10px; }
+  .meta { display: flex; align-items: center; gap: 12px; }
+  time { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+  h3 { margin: 0; }
+</style>

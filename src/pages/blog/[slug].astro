@@ -1,0 +1,60 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const dateStr = d.date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<Base title={d.title} description={d.description}>
+  <article class="section">
+    <div class="wrap narrow">
+      <header class="post-head">
+        <div class="meta">
+          <span class="chip chip-accent">{d.category}</span>
+          <time datetime={d.date.toISOString()}>{dateStr}</time>
+          <span class="author">by {d.author}</span>
+        </div>
+        <h1>{d.title}</h1>
+        {d.tags.length > 0 && (
+          <div class="chips">{d.tags.map((t) => <span class="chip">#{t}</span>)}</div>
+        )}
+      </header>
+
+      {d.image && <img class="featured" src={`${base}${d.image}`} alt="" />}
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      {d.references.length > 0 && (
+        <footer class="refs">
+          <h2>References</h2>
+          <ol>
+            {d.references.map((r) => <li>{r}</li>)}
+          </ol>
+        </footer>
+      )}
+
+      <p class="back"><a href={`${base}/blog/`}>← All posts</a></p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .narrow { max-width: 760px; }
+  .post-head { margin-bottom: 34px; display: grid; gap: 16px; }
+  .meta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  time, .author { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+  .featured { border-radius: var(--radius); border: 1px solid var(--line); margin-bottom: 34px; }
+  .refs { margin-top: 56px; border-top: 1px solid var(--line); padding-top: 28px; }
+  .refs h2 { font-size: 1.1rem; margin-bottom: 14px; }
+  .refs ol { padding-inline-start: 1.3em; color: var(--muted); font-size: 0.92rem; display: grid; gap: 8px; }
+  .back { margin-top: 44px; font-family: var(--font-display); font-weight: 600; }
+</style>

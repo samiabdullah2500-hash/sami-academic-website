@@ -1,0 +1,170 @@
+---
+import Base from '../layouts/Base.astro';
+import Lattice from '../components/Lattice.astro';
+import { nanosami as n } from '../data/nanosami';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const ok = (v?: string) => v && !v.startsWith('[ADD');
+---
+<Base title="NanoSami" description={n.tagline}>
+  <!-- HERO -->
+  <section class="ns-hero">
+    <Lattice />
+    <div class="wrap inner">
+      <p class="eyebrow">Flagship Project</p>
+      <h1>{n.name}</h1>
+      <p class="tagline">{n.tagline}</p>
+      <div class="meta">
+        <span class="chip">Version {n.currentVersion}</span>
+        <span class="chip">{n.platforms}</span>
+        <span class="chip">License: {n.license}</span>
+      </div>
+      <div class="actions">
+        {ok(n.links.download) ? <a class="btn btn-primary" href={n.links.download}>Download</a> : <span class="btn btn-primary" aria-disabled="true">Download — link coming soon</span>}
+        {ok(n.links.github) ? <a class="btn btn-ghost" href={n.links.github}>GitHub Repository</a> : <span class="btn btn-ghost" aria-disabled="true">GitHub — coming soon</span>}
+        {ok(n.links.docs) && <a class="btn btn-ghost" href={n.links.docs}>Documentation</a>}
+      </div>
+    </div>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section class="section" id="overview">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">01 · Overview</p>
+        <h2>What is NanoSami?</h2>
+      </div>
+      <div class="prose reveal"><p>{n.overview}</p></div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="section" id="problem">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">02 · The Problem</p>
+        <h2>Why deterministic, offline analysis matters</h2>
+      </div>
+      <ul class="problem-list reveal">
+        {n.problem.map((p) => <li class="card"><p>{p}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">03 · Key Features</p>
+        <h2>Built for reproducible science</h2>
+      </div>
+      <div class="grid-2 reveal">
+        {n.features.map((f) => (
+          <div class="card"><h3>{f.title}</h3><p>{f.note}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENSHOTS -->
+  <section class="section" id="screenshots">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">04 · Screenshots</p>
+        <h2>A look inside</h2>
+      </div>
+      <div class="grid-2 reveal">
+        {n.screenshots.map((s) => (
+          <figure class="shot">
+            <img src={`${base}${s.src}`} alt={s.caption} loading="lazy" />
+            <figcaption>{s.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALLATION & USAGE -->
+  <section class="section" id="install">
+    <div class="wrap">
+      <div class="grid-2">
+        <div class="reveal">
+          <div class="section-head">
+            <p class="eyebrow">05 · Installation</p>
+            <h2>Get started</h2>
+          </div>
+          <pre><code>{n.installation}</code></pre>
+        </div>
+        <div class="reveal">
+          <div class="section-head">
+            <p class="eyebrow">06 · Usage</p>
+            <h2>Basic workflow</h2>
+          </div>
+          <pre><code>{n.usage}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHANGELOG -->
+  <section class="section" id="changelog">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">07 · Changelog</p>
+        <h2>Release history</h2>
+      </div>
+      <div class="timeline reveal">
+        {n.changelog.map((c) => (
+          <div class="release">
+            <div class="release-head">
+              <span class="chip chip-accent">{c.version}</span>
+              <span class="date">{c.date}</span>
+            </div>
+            <ul>{c.changes.map((ch) => <li>{ch}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="section" id="roadmap">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">08 · Roadmap</p>
+        <h2>Where NanoSami is heading</h2>
+      </div>
+      <ul class="roadmap reveal">
+        {n.roadmap.map((r) => (
+          <li class="card">
+            <span class={`status ${r.status === 'In progress' ? 'status-in-dev' : 'status-Archived'}`}>{r.status}</span>
+            <p>{r.milestone}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ns-hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+  .ns-hero .inner { position: relative; z-index: 1; padding: clamp(70px, 12vh, 130px) 22px; }
+  .tagline { font-size: 1.2rem; color: var(--muted); max-width: 38rem; margin-top: 14px; }
+  .ns-hero .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  [aria-disabled='true'] { opacity: 0.55; cursor: default; }
+
+  .problem-list { list-style: none; display: grid; gap: 14px; max-width: 46rem; }
+  .shot img { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); }
+  .shot figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 8px; font-family: var(--font-mono); }
+
+  .timeline { display: grid; gap: 22px; max-width: 44rem; }
+  .release { border-inline-start: 2px solid var(--line); padding-inline-start: 22px; }
+  .release-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .release .date { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+  .release ul { padding-inline-start: 1.2em; color: var(--muted); }
+
+  .roadmap { list-style: none; display: grid; gap: 14px; max-width: 44rem; }
+  .roadmap .card { display: flex; align-items: center; gap: 16px; }
+  .roadmap p { margin: 0; color: var(--ink); }
+  pre { white-space: pre-wrap; }
+</style>

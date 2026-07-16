@@ -1,0 +1,112 @@
+---
+import Base from '../layouts/Base.astro';
+import Lattice from '../components/Lattice.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { profile, researchInterests, links, cvFile } from '../data/site';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const projects = (await getCollection('projects'))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+const github = links.github.startsWith('[ADD') ? '#' : links.github;
+---
+<Base title="Home">
+  <!-- HERO -->
+  <section class="hero">
+    <Lattice />
+    <div class="wrap hero-inner">
+      <p class="eyebrow">Nanoscience · Materials · Scientific Software</p>
+      <h1>
+        Exploring <span class="grad">Nanomaterials</span>.<br />
+        Building Tools for <span class="grad-2">Scientific Discovery</span>.
+      </h1>
+      <p class="lede">
+        I'm <strong>{profile.name}</strong>, an M.Sc. researcher in Nanoscience and Nanotechnology
+        at Mahatma Gandhi University, India — studying ZnO nanoparticles and building
+        <a href={`${base}/nanosami/`}>NanoSami</a>, open scientific software for deterministic,
+        offline analysis of nanomaterials data.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href={`${base}/research/`}>Explore My Research</a>
+        <a class="btn btn-ghost" href={`${base}/nanosami/`}>View NanoSami</a>
+        <a class="btn btn-ghost" href={`${base}/projects/`}>View Projects</a>
+        <a class="btn btn-ghost" href={github} rel="noopener">GitHub</a>
+        <a class="btn btn-ghost" href={`${base}${cvFile}`}>Download CV</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH FOCUS -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">01 · Research Focus</p>
+        <h2>From synthesis parameters to material properties</h2>
+        <p>
+          My work connects wet-chemical synthesis — especially sol-gel routes and the effect of
+          fuel ratio — to the structural and optical behavior of ZnO nanoparticles, characterized
+          through XRD, FTIR, Raman spectroscopy, and electron microscopy.
+        </p>
+      </div>
+      <div class="grid-3 reveal">
+        {researchInterests.slice(0, 6).map((r) => (
+          <div class="card">
+            <h3>{r.title}</h3>
+            <p>{r.note}</p>
+          </div>
+        ))}
+      </div>
+      <p class="more reveal"><a href={`${base}/research/`}>All research interests →</a></p>
+    </div>
+  </section>
+
+  <!-- FEATURED PROJECTS -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">02 · Selected Projects</p>
+        <h2>Software for the laboratory</h2>
+      </div>
+      <div class="grid-3 reveal">
+        {projects.map((p) => <ProjectCard project={p} />)}
+      </div>
+      <p class="more reveal"><a href={`${base}/projects/`}>All projects →</a></p>
+    </div>
+  </section>
+
+  <!-- LATEST WRITING -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">03 · Latest Writing</p>
+        <h2>Research notes & articles</h2>
+      </div>
+      <div class="grid-3 reveal">
+        {posts.map((p) => <PostCard post={p} />)}
+      </div>
+      <p class="more reveal"><a href={`${base}/blog/`}>Visit the blog →</a></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+  .hero-inner { position: relative; z-index: 1; padding: clamp(80px, 14vh, 150px) 22px; max-width: var(--content); }
+  .lede { max-width: 40rem; color: var(--muted); margin-top: 20px; font-size: 1.08rem; }
+  .grad {
+    background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 60%, var(--ink)));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .grad-2 {
+    background: linear-gradient(90deg, var(--accent-2), var(--accent));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+  .more { margin-top: 26px; font-family: var(--font-display); font-weight: 600; }
+</style>

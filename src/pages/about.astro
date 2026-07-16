@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile, education, techniques } from '../data/site';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base title="About" description={`About ${profile.name} — nanoscience researcher and scientific software builder.`}>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">About</p>
+        <h1>About Me</h1>
+      </div>
+
+      <div class="about-grid">
+        <div class="prose">
+          {profile.longBio.map((p) => <p>{p}</p>)}
+        </div>
+        <aside>
+          <div class="card">
+            <h3>At a glance</h3>
+            <dl>
+              <div class="def-row"><dt>Name</dt><dd>{profile.name}<br /><span lang="ar">{profile.nameArabic}</span></dd></div>
+              <div class="def-row"><dt>Degree</dt><dd>{profile.role}</dd></div>
+              <div class="def-row"><dt>Institution</dt><dd>{profile.institution}</dd></div>
+              <div class="def-row"><dt>Techniques</dt><dd class="chips">{techniques.map((t) => <span class="chip">{t}</span>)}</dd></div>
+            </dl>
+          </div>
+        </aside>
+      </div>
+
+      <div class="section-head" style="margin-top:64px">
+        <p class="eyebrow">Education</p>
+        <h2>Academic background</h2>
+      </div>
+      <div class="edu">
+        {education.map((e) => (
+          <div class="card">
+            <h3>{e.degree}</h3>
+            <p>{e.institution}</p>
+            <p class="period">{e.period}</p>
+            {e.details && <p>{e.details}</p>}
+          </div>
+        ))}
+      </div>
+      <p class="cta"><a class="btn btn-primary" href={`${base}/cv/`}>View full CV</a></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .about-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items: start; }
+  aside .card dl { margin: 0; }
+  aside .def-row { grid-template-columns: 96px 1fr; }
+  .edu { display: grid; gap: 18px; max-width: 46rem; }
+  .period { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+  .cta { margin-top: 32px; }
+  @media (max-width: 860px) { .about-grid { grid-template-columns: 1fr; } }
+</style>

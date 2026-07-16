@@ -1,0 +1,14 @@
+{
+  "name": "sami-academic-website",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Personal academic website of Sami Abdullah Mohammed - Nanoscience researcher & scientific software builder",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^7.0.7"
+  }
+}

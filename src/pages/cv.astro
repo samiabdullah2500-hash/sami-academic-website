@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile, education, researchInterests, techniques, cvFile, links } from '../data/site';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base title="CV" description={`Curriculum vitae of ${profile.name}.`}>
+  <section class="section">
+    <div class="wrap narrow">
+      <div class="section-head">
+        <p class="eyebrow">Curriculum Vitae</p>
+        <h1>{profile.name}</h1>
+        <p>{profile.role} · {profile.institution}</p>
+        <p class="dl"><a class="btn btn-primary" href={`${base}${cvFile}`} download>Download CV (PDF)</a></p>
+      </div>
+
+      <h2 class="sub">Education</h2>
+      <dl>
+        {education.map((e) => (
+          <div class="def-row">
+            <dt>{e.period}</dt>
+            <dd><strong>{e.degree}</strong><br />{e.institution}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <h2 class="sub">Research interests</h2>
+      <div class="chips">
+        {researchInterests.map((r) => <span class="chip">{r.title}</span>)}
+      </div>
+
+      <h2 class="sub">Characterization techniques</h2>
+      <div class="chips">
+        {techniques.map((t) => <span class="chip chip-accent">{t}</span>)}
+      </div>
+
+      <h2 class="sub">Software & projects</h2>
+      <dl>
+        <div class="def-row">
+          <dt>NanoSami</dt>
+          <dd>Creator and maintainer — deterministic, offline analysis of nanomaterials and experimental data. <a href={`${base}/nanosami/`}>Project page →</a></dd>
+        </div>
+      </dl>
+
+      <h2 class="sub">Links</h2>
+      <dl>
+        <div class="def-row"><dt>GitHub</dt><dd>{links.github}</dd></div>
+        <div class="def-row"><dt>Email</dt><dd>{links.email}</dd></div>
+      </dl>
+
+      <p class="note">
+        To replace the downloadable file, put your PDF at
+        <code>public{cvFile}</code> in the project.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .narrow { max-width: 780px; }
+  .sub { margin: 48px 0 18px; }
+  .dl { margin-top: 22px; }
+  .note { margin-top: 56px; color: var(--muted); font-size: 0.85rem; }
+</style>
