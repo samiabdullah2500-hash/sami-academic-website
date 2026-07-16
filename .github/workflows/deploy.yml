@@ -1,6 +1,3 @@
-# Automatic deployment to GitHub Pages.
-# Setup (one time): in your repository, go to Settings → Pages → Source → "GitHub Actions".
-# After that, every push to `main` rebuilds and publishes the site automatically.
 name: Deploy to GitHub Pages
 
 on:
@@ -18,6 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - uses: withastro/action@v3
 
   deploy:
